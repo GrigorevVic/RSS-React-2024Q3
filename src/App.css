@@ -1,0 +1,27 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.App {
+    margin: 0 auto;
+  width: 800px;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  height: 100vh;
+}
+
+.top-block {
+  min-width: 380px;
+  height: 20%;
+  border: 1px solid black;
+}
+
+.bottom-block {
+  min-width: 380px;
+  height: 60%;
+  border: 1px solid black;
+}
