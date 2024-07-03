@@ -3,38 +3,50 @@ import axios from 'axios';
 
 import './Search.module.css';
 
-interface searchString {
+interface SearchString {
   searchStr: string;
+  peoples: PeopleData[];
 }
-12;
+
+interface PeopleData {
+  name: string;
+  gender: string;
+  height: string;
+  mass: string;
+}
+
 class Search extends React.Component {
   constructor(props: object) {
     super(props);
+
     this.state = {
-      searchStr: ''
-    } as searchString;
+      searchStr: '',
+      peoples: [{ name: '' }]
+    } as SearchString;
 
     if (localStorage.search) {
-      this.state = { searchStr: localStorage.search };
+      this.state = { searchStr: localStorage.search, peoples: [{ name: '' }] };
     }
   }
 
+  async componentDidMount() {
+    const { searchStr } = this.state as SearchString;
+    const response = await axios.get(`https://swapi.dev/api/people/?search=${searchStr}`);
+    const peoples = response.data.results;
+    console.log(peoples);
+    this.setState({ peoples });
+  }
+
   render() {
-    const { searchStr } = this.state as searchString;
+    console.log('hi');
+    const { searchStr, peoples } = this.state as SearchString;
+    console.log('***', this.state);
 
     const getData = async (data: string) => {
       const response = await axios.get(`https://swapi.dev/api/people/?search=${data}`);
-      return response.data.results;
+      const peoples = response.data.results;
+      this.setState({ peoples });
     };
-
-    if (searchStr === '') {
-      const f = async () => {
-        const data = await getData('');
-        return data;
-      };
-
-      console.log(f(), '***');
-    }
 
     return (
       <div className="wrapper">
@@ -50,16 +62,25 @@ class Search extends React.Component {
             />
             <button
               onClick={async () => {
-                const { searchStr } = this.state as searchString;
+                const { searchStr } = this.state as SearchString;
                 localStorage.setItem('search', searchStr);
-                const data = await getData(searchStr);
-                console.log(data);
+                this.setState({ searchStr });
+                await getData(searchStr);
               }}>
               search
             </button>
           </div>
         </div>
-        <div className="bottom-block"></div>
+        <div className="bottom-block">
+          {peoples.map((people: PeopleData) => (
+            <div className="card" key={people.name}>
+              <p className="name">name: {people.name}</p>
+              <p className="info"> gender: {people.gender}</p>
+              <p className="info">height: {people.height}</p>
+              <p className="info">mass: {people.mass}</p>
+            </div>
+          ))}
+        </div>
       </div>
     );
   }

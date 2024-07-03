@@ -19,13 +19,27 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  min-width: 380px;
+  min-width: 500px;
   height: 20%;
   border: 1px solid black;
 }
 
 .bottom-block {
-  min-width: 380px;
+  min-width: 500px;
   height: 60%;
   border: 1px solid black;
+}
+
+.card {
+  display: flex;
+}
+
+.name {
+  width: 180px;
+  padding: 2px;
+}
+
+.info {
+  width: 100px;
+  padding: 2px;
 }
