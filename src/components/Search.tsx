@@ -6,6 +6,7 @@ import './Search.module.css';
 interface SearchString {
   searchStr: string;
   peoples: PeopleData[];
+  hasError: boolean;
 }
 
 interface PeopleData {
@@ -21,11 +22,12 @@ class Search extends React.Component {
 
     this.state = {
       searchStr: '',
-      peoples: [{ name: '' }]
+      peoples: [],
+      hasError: false
     } as SearchString;
 
     if (localStorage.search) {
-      this.state = { searchStr: localStorage.search, peoples: [{ name: '' }] };
+      this.state = { searchStr: localStorage.search, peoples: [] };
     }
   }
 
@@ -33,14 +35,19 @@ class Search extends React.Component {
     const { searchStr } = this.state as SearchString;
     const response = await axios.get(`https://swapi.dev/api/people/?search=${searchStr}`);
     const peoples = response.data.results;
-    console.log(peoples);
     this.setState({ peoples });
   }
 
+  click = () => {
+    this.setState({ peoples: null });
+  };
+
   render() {
-    console.log('hi');
-    const { searchStr, peoples } = this.state as SearchString;
-    console.log('***', this.state);
+    const { searchStr, peoples, hasError } = this.state as SearchString;
+
+    if (hasError) {
+      return <div>Ой, произошла ошибка</div>;
+    }
 
     const getData = async (data: string) => {
       const response = await axios.get(`https://swapi.dev/api/people/?search=${data}`);
@@ -50,6 +57,12 @@ class Search extends React.Component {
 
     return (
       <div className="wrapper">
+        <button
+          onClick={() => {
+            this.click();
+          }}>
+          error
+        </button>
         <div className="top-block">
           <div className="search">
             <input
