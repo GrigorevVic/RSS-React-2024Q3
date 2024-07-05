@@ -1,1 +1,1 @@
-# RSS-React-2024Q3
+# RS School React 2024 Q3
